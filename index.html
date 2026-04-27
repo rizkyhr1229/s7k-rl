@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Seven Knights - Ultimate Guide</title>
+    <link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="gold">
+    <style>
+        /* CSS ASLI TIDAK DIUBAH */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        body { 
+            background-image: url('7k/Latar.png');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            background-color: #0f0f1a; color: white; font-family: 'Segoe UI', Tahoma, sans-serif; 
+            display: flex; flex-direction: column; align-items: center; padding: 20px;
+        }
+
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); z-index: -1;
+        }
+
+        .logo { 
+            width: 260px; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)); 
+            animation: float 3s ease-in-out infinite; margin-bottom: 40px; 
+        }
+
+        .icon-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-bottom: 40px; width: 100%; max-width: 1000px; }
+        
+        .hero-icon { 
+            width: 75px; height: 75px; border-radius: 50%; cursor: pointer; 
+            border: 3px solid #ffd700; transition: 0.3s; object-fit: cover; 
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        .hero-icon.villain { border-color: #a335ee; box-shadow: 0 0 10px rgba(163, 53, 238, 0.4); }
+        .hero-icon:hover { transform: scale(1.15); box-shadow: 0 0 20px currentColor; }
+
+        .hero-label {
+            display: block; font-size: 11px; margin-top: 8px; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px;
+            text-shadow: 1px 1px 2px black, 0 0 5px rgba(0,0,0,0.8);
+        }
+
+        #detail-panel { 
+            display: none; background: rgba(20, 20, 30, 0.95); backdrop-filter: blur(15px);
+            padding: 25px; border-radius: 25px; max-width: 450px; width: 100%;
+            border: 2px solid gold; box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            text-align: center; margin-bottom: 50px;
+        }
+        #detail-panel.panel-villain { border-color: #a335ee; }
+
+        .gender-selector { display: flex; justify-content: center; gap: 10px; margin: 15px 0; }
+        .gender-btn {
+            background: #222; color: #888; border: 1px solid #444; padding: 10px 20px;
+            border-radius: 15px; cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .gender-btn.active { background: gold; color: black; box-shadow: 0 0 10px gold; }
+        .gender-btn.active-v { background: #a335ee; color: white; box-shadow: 0 0 10px #a335ee; }
+
+        .hero-img { 
+            width: 100%; height: auto; max-height: 500px; display: block; background-color: transparent; object-fit: contain; 
+            background-color: #000; border-radius: 20px; border: 1px solid #333; 
+            margin: 10px 0; box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+        }
+        
+        h2#name-display { color: gold; text-transform: uppercase; font-size: 2.2em; text-shadow: 2px 2px 4px black; letter-spacing: 2px; }
+        #title-display { font-style: italic; color: #ccc; font-size: 0.9em; display: block; margin-bottom: 10px; }
+        .villain-text { color: #d187ff !important; }
+
+        .stat-box { margin-bottom: 15px; text-align: left; }
+        .stat-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 0.8em; margin-bottom: 5px; }
+        .bar-outer { background: #111; height: 12px; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
+        .bar-inner { height: 100%; width: 0; transition: width 0.5s ease; }
+        .hp-color { background: #ff416c; }
+        .atk-color { background: #f89b29; }
+        .spd-color { background: #00d2ff; }
+
+        .input-row { display: grid; gap: 5px; margin-top: 8px; grid-template-columns: 1fr 1fr; width: 100%;}
+        input, textarea { flex: 1; background: #000; color: gold; border: 1px solid #444; padding: 8px; border-radius: 5px; outline: none; font-family: inherit; min-width: 0; }
+        .set-btn { background: gold; color: black; border: none; padding: 8px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
+        .info-box {
+            background: linear-gradient(145deg, #1a1a2e, #0f0f1a);
+            border-left: 4px solid gold; border-right: 4px solid gold;
+            margin: 15px 0; padding: 15px; border-radius: 10px; text-align: left;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px; }
+        .info-item { font-size: 0.75em; color: #aaa; overflow: hidden; }
+        .info-item b { color: gold; display: block; font-size: 1.1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+
+        .mission-box {
+            background: rgba(255, 215, 0, 0.05); border: 1px dashed gold;
+            margin: 15px 0; padding: 15px; border-radius: 12px; text-align: left;
+        }
+        .mission-title { font-size: 0.8em; font-weight: 900; color: gold; margin-bottom: 8px; border-bottom: 1px solid gold; display: inline-block; }
+        .mission-list { list-style: none; font-size: 0.85em; line-height: 1.6; color: #ddd; }
+
+        .passive-mastery { margin: 20px 0 10px 0; text-align: left; }
+        .mastery-bars { display: flex; gap: 4px; height: 15px; margin-top: 5px; }
+        .m-bar { flex: 1; background: #222; border: 1px solid #444; border-radius: 2px; transition: 0.3s; }
+        .m-bar.active { background: #00ff88; box-shadow: 0 0 8px #00ff88; border-color: #fff; }
+
+        .passive-detail {
+            background: #0a0a12; border: 1px solid #333; padding: 12px;
+            border-radius: 8px; font-size: 0.8em; color: #bbb; text-align: left; font-style: italic;
+        }
+
+        .gm-edit-area { margin-top: 10px; display: none; flex-direction: column; gap: 5px; }
+
+        .money-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .money-label { color: #aaa; font-size: 0.8em; font-weight: bold; }
+        .money-value { color: #00ff88; font-family: 'Courier New', monospace; font-weight: bold; font-size: 1.2em; }
+
+        #story-box {
+            display: none;
+            background: rgba(10, 10, 20, 0.95);
+            backdrop-filter: blur(8px);
+            border: 2px solid gold;
+            padding: 25px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 15px rgba(255, 215, 0, 0.1);
+            line-height: 1.8;
+            text-align: justify;
+            white-space: pre-line;
+        }
+
+        .btn-story-gm {
+            background: #4a0000;
+            color: white;
+            border: 1px solid #ff4444;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 20px 0;
+            transition: 0.3s;
+            display: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- CSS TAMBAHAN UNTUK LIVE CHAT (TIDAK MERUSAK CSS LAMA) --- */
+        #chat-bubble {
+            position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px;
+            background: gold; border-radius: 50%; display: none; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 0 15px rgba(255,215,0,0.4); z-index: 10001; transition: 0.3s;
+        }
+        #chat-bubble:hover { transform: scale(1.1); }
+        #chat-bubble img { width: 30px; filter: invert(1); }
+        #chat-notif {
+            position: absolute; top: -2px; right: -2px; background: red; color: white;
+            font-size: 10px; width: 20px; height: 20px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center; border: 2px solid white;
+        }
+        #chat-window {
+            position: fixed; bottom: 90px; right: 20px; width: 300px; height: 400px;
+            background: #0f0f1a; border: 2px solid gold; border-radius: 15px;
+            display: none; flex-direction: column; z-index: 10001; overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+        .chat-header { background: gold; color: black; padding: 10px; font-weight: bold; display: flex; justify-content: space-between; }
+        .chat-body { flex: 1; padding: 10px; overflow-y: auto; background: #050505; display: flex; flex-direction: column; gap: 8px; }
+        .chat-footer { padding: 10px; background: #111; display: flex; gap: 5px; border-top: 1px solid #333; }
+        .msg { max-width: 80%; padding: 8px 10px; border-radius: 10px; font-size: 12px; line-height: 1.4; position: relative; }
+        .msg-me { align-self: flex-end; background: #222; color: gold; border-right: 2px solid gold; }
+        .msg-other { align-self: flex-start; background: gold; color: black; }
+        .msg-info { font-size: 8px; display: block; margin-bottom: 3px; opacity: 0.7; font-weight: bold; }
+        .chat-select { background: #000; color: gold; border: 1px solid gold; padding: 5px; width: 100%; margin-bottom: 10px; border-radius: 5px; font-size: 11px; }
+
+        /* Container untuk menampung ikon dan status */
+.icon-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+/* Efek redup hanya untuk gambar, bukan bingkai */
+.hero-icon.is-statused {
+    filter: brightness(0.5) grayscale(0.3);
+}
+
+/* Teks Status tepat di tengah ikon */
+.status-overlay {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Agar klik tetap tembus ke ikon */
+    font-weight: 900;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px black, 0 0 10px rgba(0,0,0,1);
+    white-space: nowrap;
+    z-index: 10;
+}
+    </style>
+</head>
+<body>
+
+    <img src="7k/Logo.png" class="logo">
+
+    <div class="icon-container" id="icon-grid"></div>
+
+    <center>
+        <button id="gm-story-btn" class="btn-story-gm" onclick="toggleStory()">
+            📖 OPEN STORY MODE
+        </button>
+    </center>
+
+    <div id="story-box">
+        <div class="story-header" style="color:gold; font-weight:bold; margin-bottom:10px; border-bottom:1px solid gold;">THE SEVEN KNIGHTS - HERO</div>
+        <div id="story-content">
+            Selamat datang para player. Saat ini kalian akan berperan sebagai seorang Hero yang kalian pilih untuk menyelesaikan misi dan tujuan kalian masing-masing. Yang tentunya tujuan utama kalian adalah mewujudkan kedamaian untuk semua orang yang ada di Dunia ini. Kalian tidak lagi berada di Bumi, karena sebuah portal misterius muncul tepat di depan kalian dan membawa kalian ke sebuah dunia lain, di kehidupan lain dan tentunya peradapan lain. Inilah kisah kalian... 
+
+            <span style="border-bottom:1px solid #e0e0e0;">PENGENALAN DUNIA BARU</span>
+
+            Di Dunia ini , ada seorang Dewi yang berperan penting dalam penciptaan dunia. Namanya adalah GAIA.
+
+            Dewi Gaia menciptakan sebuah Dunia yang diberi nama sesuai dengan nama nya sendiri yaitu Dunia Gaia. Para makhluk hidup pun mulai hidup dan berkembang di sana. 
+
+            Namun suatu ketika Dewi Gaia merasakan gejolak yang hebat atas hasrat terdalam nya. Untuk mencegah hal yang tidak diinginkan terjadi, Dewi Gaia membagi tubuh nya menjadi dua. Yang mana masing-masing tubuh itu mempresentasikan dua sifat yang berbeda. Di tubuh yang satu, di sisi cahaya yang dikenal sebagai Dewi Kehidupan atau Dewi Pencipta, dialah Dewi Gaia itu sendiri. Sedangkan di sisi lainnya, di tubuh lainnya yang terpisah darinya dikenal sebagai Dewi Kehancuran, dialah Dewi Nestra. Dewi Gaia dan Dewi Nestra seharusnya adalah 1 sosok yang sama. Namun Dewi Nestra menolak untuk bergabung kembali dan sangat tidak suka dengan semua kebijakan yang diterapkan oleh Dewi Gaia.
+
+            Karena Dewi Gaia sangat takut dengan adanya Dewi Nestra sekarang, dan ia tidak ingin dunia nya kacau. Dewi Gaia pun memutuskan untuk bertarung melawannya , dengan harapan Dewi Nestra dapat bergabung bersama nya lagi atau memusnahkannya untuk selama-lamanya.
+
+            Namun usaha yang dilakukan Dewi Gaia tidak semudah itu. Mereka saling bertarung satu sama lain hingga 2.000 tahun lamanya. Namun tidak ada satupun dari mereka yang menang, karena pada aslinya mereka adalah 1 kekuatan yang terbagi menjadi 2. Oleh karena itu Dewi Gaia membuat kesepakatan bersama Dewi Nestra, yaitu mengelola, mengatur Dunia Gaia bersama-sama. Dewi Gaia sebagai pemberi rahmat dan kedamaian, dan Dewi Nestra sebagai pembawa kehancuran sekaligus cobaan untuk semua makhluk hidup di Dunia Gaia. Mereka juga bersepakat untuk tidak ikut campur secara langsung dalam setiap masalah yang ada. Mereka hanya memberikan fasilitas sedangkan penentu hasil akhir / takdir ditentukan oleh para manusia di Dunia Gaia itu sendiri. Mereka bebas memilih jalan mana yang mau mereka ambil, apakah itu jalan Cahaya ataupun jalan Kegelapan.
+
+            <span style="border-bottom:1px solid #e0e0e0;">MASUK KE ALUR CERITA</span>
+
+            Pada zaman ini, Dunia Gaia terbagi atas 2 benua besar. Di bagian timur, terdapat daratan besar yang diberi nama Benua Aisha. Dan di bagian barat, ada daratan besar lainnya bernama Benua Asgar.
+
+            Di Benua Asgar berdiri banyak sekali kerajaan-kerajaan. Dari kerajaan-kerajaan ini lahir lah para ksatria-kstaria pemberani yang selau membela kebenaran. Diantara banyak kerajaan itu, ada 7 kerajaan terbesar dan paling berpengaruh di Benua Asgar. Dan tujuh kerajaan itu dipimpin oleh raja/ratu mereka masing-masing, mereka adalah Rudy, Kris, Dellons, Spike, Jave, Eileene, dan Rachel.
+
+            Supaya 7 kerajaan besar ini tidak melakukan intervensi satu sama lain. Ketujuh pemimpin tersebut membentuk sebuah grup yang dikenal dengaN SEVEN KNIGHTS. Dan mereka membuat perjanjian agar selalu cinta damai dan semua masalah harus diselesaikan melalui diskusi telebih dahulu. Hal ini juga membuat kerajaan-kerajaan kecil lain nya menjadi merasa lega, dan mendukung setiap kebijakan yang di tentukan oleh ketujuh kerajaan besar tersebut.
+
+            <span style="border-bottom:1px solid #e0e0e0;">MASUKNYA KONFLIK</span>
+
+            Tahun-tahun pun berlalu dengan damai. Namun hingga suatu ketika, muncul sebuah benda yang misterius dari langit Gaia. Benda itu seperti komet/bintang jatuh namun berwarna ungu pekat melintas di langit Gaia, dan jatuh di bagian paling ujung dari tanah Gaia. Setelah di selidiki benda misterius adalah Crystal Abyss. 
+
+            Crystal Abyss adalah sebuah entitas luar yang membawa kekuatan misterius namun sangat besar. Kekuatan nya sangat besar, hingga semua orang di Dunia Gaia dapat merasakan hadirnya kekuatan besar itu. Tentunya banyak orang yang penasaran dan mencari crystal tersebut. Namun setelah dicari di titik jatuhnya, benda itu sudah menghilang dari sana, benda itu seolah masuk ditelan ke dalam tanah dan masuk ke inti dari Dunia Gaia. Tentunya hal ini adalah ulah dari Dewi Nestra yang menurunkan 1/2 dari kekuatannya melalui sebuah crystal. Kekuatan itu akhirnya diberi nama Kekuatan Abyss. Hal ini tidak bisa ditentang oleh Dewi Gaia karena sudah terikat perjanjian sebelumnya. Namun pastinya Dewi Gaia mengecam keras perbuatan Dewi Nestra, karena menurutnya itu sebuah kecurangan. Dewi Nestra memang tidak turun langsung ke dunia, tapi ia menurunkan 1/2 dari kekuatannya untuk mencari cobaan disana.
+
+            Setelah jatuh nya Crystal Abyss di tanah Gaia. Rasa benci, dendam, egois, dan haus akan kekuatan mulai menyebar ke seluruh Gaia.
+
+            ❕Para Seven Knights pun berkumpul untuk mendiskusikan ini...
+
+
+            <div style="text-align: center; color: gold; font-weight: bold; border-bottom:5px solid gold;"></div>
+        </div>
+        <div class="story-header" style="color:#d187ff; font-weight:bold; margin-bottom:10px; border-bottom:1px solid #d187ff; margin-top: 80px;">THE SEVEN KNIGHTS - VILLAIN</div>
+        <div id="story-content">
+            Selamat datang para player. Saat ini kalian akan berperan sebagai seorang Villain yang kalian pilih untuk menyelesaikan misi dan tujuan kalian masing-masing. Yang tentunya tujuan utama kalian adalah menguasai Dunia ini. Kalian tidak lagi berada di Bumi, karena sebuah portal misterius muncul tepat di depan kalian dan membawa kalian ke sebuah dunia lain, di kehidupan lain dan tentunya peradapan lain. Inilah kisah kalian... 
+
+            <span style="border-bottom:1px solid #e0e0e0;">MASUK KE ALUR CERITA</span>
+
+            Pada zaman ini, Dunia Gaia terbagi atas 2 benua besar. Di bagian barat, terdapat daratan besar yang diberi nama Benua Asgar. Dan di bagian timur, ada daratan besar lainnya bernama Benua Aisha.
+
+            Di Benua Aisha, berdiri 4 kerajaan yang mengelilingi benua Aisha. Di Utara ada dipegang oleh Teo, di Timur dipegang oleh Karma, di Selatan di pegang oleh Ace, dan di Barat dipegang oleh Rin. Mereka ber-4 dikenal sebagai Four Lords. Di tengah-tengah mereka di Central Aisha, berdiri 1 kekaisaran besar lagi. Yang mana kekaisaran ini merupakan pusat kekaisaran dari semua kerajaan. Para Four Lords tunduk kepada nya. Kekaisaran ini dipimpim oleh Kaisar Pascal. Pascal mengatur semua sistem yang ada di Benua Aisha.
+
+            Tujuan Pascal hanya satu menguasai Dunia Gaia , dan membuat semua orang bertekuk lutut di hadapannya.
+
+            <span style="border-bottom:1px solid #e0e0e0;">MASUKNYA KONFLIK</span>
+
+            Tahun-tahun pun berlalu. Hingga suatu ketika, muncul sebuah benda yang misterius dari langit Gaia. Benda itu seperti komet/bintang jatuh namun berwarna ungu pekat melintas di langit Gaia, dan jatuh di bagian paling ujung dari tanah Gaia. Setelah di selidiki benda misterius adalah Crystal Abyss. 
+
+            Crystal Abyss adalah sebuah entitas luar yang membawa kekuatan misterius namun sangat besar. Kekuatan nya sangat besar, hingga semua orang di Dunia Gaia dapat merasakan hadirnya kekuatan besar itu. Tentunya banyak orang yang penasaran dan mencari crystal tersebut. Termasuk Kaisar Pascal. Namun setelah dicari di titik jatuhnya, benda itu sudah menghilang dari sana, benda itu seolah masuk ditelan ke dalam tanah dan masuk ke inti dari Dunia Gaia. Tentunya hal ini adalah ulah dari Dewi Nestra yang menurunkan 1/2 dari kekuatannya melalui sebuah crystal. Kekuatan itu akhirnya diberi nama Kekuatan Abyss.
+
+            Dengan cepat Pascal memerintahkan para Four Lords untuk mencari dan membawakan Crystal Abyss itu kehadapannya.
+
+            ❕Para Four Lords pun berkumpul untuk mendiskusikan ini... 
+
+
+            <div style="text-align: center; color: gold; font-weight: bold; border-bottom:5px solid #d187ff;"></div>
+        </div>
+    </div>
+
+    <div id="detail-panel">
+        <div class="gm-edit-area" id="gm-name-edit" style="margin-bottom: 15px;">
+            <div class="input-row">
+                <input type="text" id="in-name-m" placeholder="Male Name">
+                <input type="text" id="in-name-f" placeholder="Female Name">
+            </div>
+            <div class="input-row">
+                <input type="text" id="in-title" placeholder="Hero Title">
+                <input type="text" id="in-pass" placeholder="Hero Password">
+            </div>
+        <div class="input-row" style="margin-top: 5px;">
+    <select id="in-status" style="width: 100%; background: #000; color: gold; border: 1px solid #444; padding: 8px; border-radius: 5px;">
+        <option value="">-- SET STATUS (NORMAL) --</option>
+        <option value="SAKIT">SAKIT</option>
+        <option value="PINGSAN">PINGSAN</option>
+        <option value="MATI">MATI</option>
+        <option value="SIBUK">SIBUK</option>
+        <option value="AFK">AFK</option>
+    </select>
+</div>
+            <button class="set-btn" onclick="saveExtra('identity')" style="margin-top:5px; width:100%;">SAVE IDENTITY & PASSWORD</button>
+        </div>
+
+        <h2 id="name-display">NAME</h2>
+        <span id="title-display">Title/Sinopsis</span>
+
+        <div class="info-box">
+            <p id="desc-display" style="font-size: 0.85em; line-height: 1.4; color: #eee; text-align: justify;">Hero Description Here...</p>
+            <div class="info-grid">
+                <div class="info-item">ELEMENT<b id="elem-display">FIRE</b></div>
+                <div class="info-item">WEAPON<b id="weap-display">SWORD</b></div>
+            </div>
+            <div class="gm-edit-area" id="gm-info-edit">
+                <textarea id="in-desc" placeholder="Edit Description"></textarea>
+                <div class="input-row">
+                    <input type="text" id="in-elem" placeholder="Element">
+                    <input type="text" id="in-weap" placeholder="Weapon">
+                    <button class="set-btn" onclick="saveExtra('info')">SAVE INFO</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mission-box">
+            <div class="mission-title" onclick="toggleMission()" style="cursor:pointer">MAIN OBJECTIVES</div>
+            
+            <div id="mission-content-wrapper" style="display:none;">
+                <ul class="mission-list" id="mission-display"></ul>
+                
+                <div class="mission-title" style="margin-top:10px; border-top: 1px dashed #444; padding-top: 5px;">SECRET MISSION</div>
+                <ul class="mission-list" id="secret-mission-display"></ul>
+
+                <div class="gm-edit-area" id="gm-mission-edit">
+                    <textarea id="in-mission" placeholder="Misi Biasa..." style="height: 80px;"></textarea>
+                    <textarea id="in-secret" placeholder="Misi Rahasia..." style="height: 80px; margin-top:5px;"></textarea>
+                    <button class="set-btn" onclick="saveExtra('mission')" style="margin-top:5px">UPDATE ALL MISSION</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="gender-selector">
+            <button id="btn-male" class="gender-btn active" onclick="setGender('male')">MALE</button>
+            <button id="btn-female" class="gender-btn" onclick="setGender('female')">FEMALE</button>
+        </div>
+        
+        <img src="" id="portrait" class="hero-img">
+        
+        <div class="money-box">
+            <span class="money-label">CURRENT MONEY</span>
+            <span class="money-value" id="money-txt">0</span>
+        </div>
+
+        <div class="input-row" id="gm-money-row" style="margin-bottom: 20px;">
+            <input type="number" id="money-in" placeholder="Set Money Amount">
+            <button class="set-btn" onclick="save('money')">SET</button>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-header"><span>HP</span> <span id="hp-txt">0</span></div>
+            <div class="bar-outer"><div id="hp-bar" class="bar-inner hp-color"></div></div>
+            <div class="input-row" id="gm-hp-row"><input type="number" id="hp-in"><button class="set-btn" onclick="save('hp')">SET</button></div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-header"><span>ATK</span> <span id="atk-txt">0</span></div>
+            <div class="bar-outer"><div id="atk-bar" class="bar-inner atk-color"></div></div>
+            <div class="input-row" id="gm-atk-row"><input type="number" id="atk-in"><button class="set-btn" onclick="save('atk')">SET</button></div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-header"><span>REGEN</span> <span id="spd-txt">0</span></div>
+            <div class="bar-outer"><div id="spd-bar" class="bar-inner spd-color"></div></div>
+            <div class="input-row" id="gm-spd-row"><input type="number" id="spd-in"><button class="set-btn" onclick="save('spd')">SET</button></div>
+        </div>
+
+        <div class="passive-mastery">
+            <div class="stat-header"><span>PASIF</span> <span id="pas-val">0/10</span></div>
+            <div class="mastery-bars" id="mastery-container"></div>
+            <div class="input-row" id="gm-pas-row">
+                <input type="number" id="pas-in" max="10" min="0">
+                <button class="set-btn" onclick="save('passivePoin')">SET POIN</button>
+            </div>
+        </div>
+
+        <div class="passive-detail" id="pas-detail-display">Passive effect detail...</div>
+        <div class="gm-edit-area" id="gm-pas-detail-edit">
+            <textarea id="in-pas-detail" placeholder="Detail Pasif"></textarea>
+            <button class="set-btn" onclick="saveExtra('passiveDetail')" style="margin-top:5px">SAVE DETAIL</button>
+        </div>
+    </div>
+
+    <div id="chat-bubble" onclick="toggleChat()">
+        <img src="https://cdn-icons-png.flaticon.com/512/589/589708.png">
+        <div id="chat-notif">0</div>
+    </div>
+
+    <div id="chat-window">
+        <div class="chat-header">
+            <span>LIVE CHAT 💬</span>
+            <span onclick="toggleChat()" style="cursor:pointer">&times;</span>
+        </div>
+        <div class="chat-body" id="chat-body">
+            <select id="chat-target" class="chat-select" onchange="renderChat()">
+                <option value="GM">HUBUNGI GM (MASTER)</option>
+            </select>
+            <div id="msg-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter') sendChat()">
+            <button class="set-btn" onclick="sendChat()">KIRIM</button>
+        </div>
+    </div>
+
+    <div id="password-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:#1a1a1a; border:2px solid gold; padding:25px; border-radius:15px; text-align:center; width:85%; max-width:300px; box-shadow: 0 0 20px rgba(255,215,0,0.2);">
+            <h3 id="modal-title" style="color:gold; margin-top:0; letter-spacing:1px;">Sandi Hero</h3>
+            <input type="password" id="sandi-input" style="width:100%; padding:12px; margin:15px 0; background:#333; color:white; border:1px solid #555; border-radius:8px; text-align:center;" placeholder="Masukkan Sandi...">
+            <div style="display:flex; gap:10px;">
+                <button onclick="closeModal()" style="flex:1; background:#444; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">BATAL</button>
+                <button onclick="cekSandi()" style="flex:1; background:gold; color:black; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">OKE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:20000; justify-content:center; align-items:center;">
+    <div style="background:#222; border:2px solid gold; padding:20px; border-radius:10px; text-align:center; min-width:250px; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+        <p style="color:white; margin-bottom:20px; font-weight:bold;">Hapus pesan ini?</p>
+        <button onclick="eksekusiHapus()" style="background:red; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; margin-right:10px; font-weight:bold;">HAPUS</button>
+        <button onclick="tutupConfirm()" style="background:#555; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold;">BATAL</button>
+    </div>
+</div>
+
+    <div id="gm-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; justify-content:center; align-items:center;">
+        <div style="background:#111; border:2px solid #d187ff; padding:25px; border-radius:15px; text-align:center; width:85%; max-width:320px; box-shadow: 0 0 20px rgba(209, 135, 255, 0.3);">
+            <h2 style="color:#d187ff; margin-top:0; font-size:18px; letter-spacing:2px;">GM AUTHENTICATION</h2>
+            <input type="password" id="gm-input" style="width:100%; padding:12px; margin-bottom:20px; background:#222; color:white; border:1px solid #444; border-radius:8px; text-align:center; font-size:16px; outline:none;" placeholder="••••••••">
+            <div style="display:flex; gap:10px;">
+                <button onclick="closeGMModal()" style="flex:1; background:#333; color:#ccc; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">BATAL</button>
+                <button onclick="cekGMLogin()" style="flex:1; background:#d187ff; color:black; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">ACCESS</button>
+            </div>
+        </div>
+    </div>
+
+    <center>
+        <button id="btn-login-gm" onclick="loginGM()" style="margin-top:20px; background:none; border:1px solid #333; color:#555; padding:5px 10px; border-radius:5px; font-size:10px; cursor:pointer;">MODE GM</button>
+        <button id="btn-logout-gm" onclick="logoutGM()" style="display:none; margin-top:10px; background:none; border:1px solid #333; color:#555; padding:5px 10px; border-radius:5px; font-size:10px; cursor:pointer;">KELUAR MODE GM</button>
+    </center>
+
+    <script>
+        const initialHeroes = {
+            'Rudy': { 
+                name: 'Rudy', nameFemale: 'Ruby', title: 'Absolute Guardian', pass: '2000', role: 'hero',
+                money: 20000,
+                img: '7k/Rudy_m.webp?v=1',
+                imgFemale: '7k/Rudy_f.webp?v=1',
+                icon: '7k/Rudy.webp?v=1',
+                hp: 200, atk: 25, spd: 10,
+                desc: 'Rudy adalah ksatria cahaya dengan kemampuan pertahanan terhebat di seluruh Gaia. Karakternya baik, pintar, tegas, sabar, terhormat, suka menolong, jujur dan adil. Bahkan saking adilnya, ia dikenal sebagai si fanatik keadilan. Rudi berkuasa di wilayah Terra Kingdom.',
+                elem: 'Light', weap: 'Shield & Sword', 
+                mission: '- Pimpin Seven Knights.\n- Jaga keutuhan Seven Knights .\n- Halalkan segala cara jika dihadapkan dengan situasi yang sulit, karena bagimu KEADILAN adalah segalanya.',
+                missionSecret: "Setiap kemenangan dalam pertarungan +1 pasif dan +10.000 koin.",
+                passivePoin: 3, passiveDetail: 'Melindungi diri sendiri ataupun semua orang yang ada di sekitarmu dari serangan fatal.'
+            },
+            'Kris': { 
+                name: 'Kris', nameFemale: 'Krista', title: 'Hell Lord', pass: '2000', role: 'hero',
+                money: 20000,
+                img: '7k/Kris_m.webp',
+                imgFemale: '7k/Kris_f.webp',
+                icon: '7k/Kris.webp',
+                hp: 190, atk: 30, spd: 5,
+                desc: 'Kris adalah ksatria terkuat di Seven Knights. Karakternya dingin dan terlihat kejam. Namun dibalik sikap dingin nya itu, dia adalah orang yang baik dan penuh empati. Sikapnya itu sering di salah pahami. Kris selalu ingin menyaingi Rudy. Rudy adalah rivalnya. Walaupun Kris lebih kuat dari Rudy, dia selalu kalah dengan siasat dan kepintaran Rudy. Kris berkuasa atas Dunia Bawah atau Underworld.',
+                elem: 'Dark & Light', weap: 'Sword', 
+                mission: '- Sering berlatih untuk menyaingi Rudy.\n- Dengarkan setiap suara semua orang.',
+                missionSecret: "Berlatih diam-diam untuk melampui Rudy (+5.000 koin per latihan).",
+                passivePoin: 1, passiveDetail: 'Jika dapat mata dadu terbesar, bisa membunuh 1 orang  secara langsung,  Bar Pasif tetap akan berkurang jika gagal. Jika dapat mata dadu terbesar berkali-kali, penggunaan tetap sesuai dengan jumlah Bar Pasif sekarang.'
+            },
+            'Dellon': { 
+                name: 'Dellons', nameFemale: 'Dellona', title: 'Grim Reaper', pass: '2000',  role: 'hero',
+                money: 20000,
+                img: '7k/Dellons_m.webp',
+                imgFemale: '7k/Dellons_f.webp',
+                icon: '7k/Dellons.webp',
+                hp: 180, atk: 25, spd: 5,
+                desc: 'Dellons adalah anggota ke-3 terkuat di Seven Knights. Karakternya pintar, murah senyum dan sangat ramah. Namun di balik senyuman nya  itu tesimpan sesuatu yang lebih dalam. Dellons berkuasa di Dark Grave.',
+                elem: 'Dark', weap: 'Scythe', mission: '- Kuasai Dunia Gaia untuk membangkitkan kekasih mu Rosie yang telah mati.\n- Pelajari dan kuasi kekuatan Abyss secara diam-diam.',
+                missionSecret: "Hasut Kris agar bertarung melawan Rudy (+150.000 coin).; Tukarkan 100.000 koin untuk mendapatkan kekuatan Abyss pertama mu ke GM (+1 bar pasif).",
+                passivePoin: 6, passiveDetail: 'Kebal dari serangan musuh bertipe Dark. Bar Pasif berkurang setiap pemakaian.'
+            },
+            'Spike': { 
+                name: 'Spike', nameFemale: 'Spika', title: 'Frozen Heart', pass: '2000',  role: 'hero',
+                money: 20000,
+                img: '7k/Spike_m.webp',
+                imgFemale: '7k/Spike_f.webp',
+                icon: '7k/Spike.webp',
+                hp: 160, atk: 20, spd: 1,
+                desc: 'Spike adalah anggota paling diam di Seven Knights. Kekuatannya setara dengan Jave. Jave adalah rival sekaligus sahabat terdekat nya. Karakternya sangat dingin, tegas dan sangat diam. Dia sangat jarang berbicara, hampir seperti orang bisu. Dan dia sangat patuh dengan aturan dan sistem yang ada. Spike berkuasa di Frozen Land.',
+                elem: 'Ice', weap: 'Greataxe', 
+                mission: '- Jaga wilayah mu dari penyusup.',
+                missionSecret: "Bertempur bersama Jave (+10.000 koin per battle).",
+                passivePoin: 1, passiveDetail: 'Memulihkan HP sebesar 50%.'
+            },
+            'Jave': { 
+                name: 'Jave', nameFemale: 'Javia', title: 'Dragon Patron', pass: '2000',  role: 'hero',
+                money: 20000,
+                img: '7k/Jave_m.webp',
+                imgFemale: '7k/Jave_f.webp',
+                icon: '7k/Jave.webp',
+                hp: 160, atk: 20, spd: 1,
+                desc: 'Jave adalah ksatria paling berani di Seven Knights. Kekuatannya setara dengan Spike. Spike adalah rivalnya sekaligus satu-satunya manusia yang dia percaya. Karena sedari kecil ia dibuang oleh kedua orang tuanya dan di besarkan oleh sekelompok naga suci. Karakternya ramah, pemberani, sembrono dan humoris. Dia sangat suka tantangan. Jave berkuasa dan menjaga Dragon Ruins.',
+                elem: 'Fire & Power', weap: 'Spear', mission: '- Jaga wilayah Dragon Ruins.\n- Menjaga hubungan dengan Spike.',
+                missionSecret: "Bertempur bersama Spike (+1 bas pasif per battle).;Selamatkan setiap naga yang di perbudak manusia (+5.000 koin per naga).",
+                passivePoin: 2, passiveDetail: 'Panggil naga untuk membantumu dalam Battle, atk naik +20.'
+            },
+            'Eileene': { 
+                name: 'Eilen', nameFemale: 'Eileene', origin: 'female', title: 'Fodina Empress', pass: '2000', role: 'hero',
+                money: 20000,
+                img: '7k/Eileene_f.webp',
+                imgFemale: '7k/Eileene_m.webp',
+                icon: '7k/Eileene.webp',
+                hp: 140, atk: 15, spd: 5,
+                desc: 'Eileene adalah ksatria terkuat ke-6 di Seven Knights. Dia adalah pemimpin dari tentara bayaran terbesar di tanah Gaia. Karakternya tegas, taat, pemberani dan pantang menyerah. Rachel adalah saudari angkat nya. Eileene berkuasa di Fodina Castle.',
+                elem: 'Lighting', weap: 'Spear ', 
+                mission: '- Bantu semua orang yang dalam kesusahan.\n- Utamakan uang dan keberhasilan misi diatas segalanya.',
+                missionSecret: "Basmi para Orc (+5.000 koin per battle).",
+                passivePoin: 2, passiveDetail: 'Menambah poin Regen sebenyak +20 dan atk +10.'
+            },
+            'Rachel': { 
+                name: 'Rach', nameFemale: 'Rachel', origin: 'female', title: 'Phoenix Flame', pass: '2000',  role: 'hero',
+                money: 20000,
+                img: '7k/Rachel_f.webp',
+                imgFemale: '7k/Rachel_m.webp',
+                icon: '7k/Rachel.webp',
+                hp: 120, atk: 15, spd: 100,
+                desc: 'Rachel adalah ksatria Seven Knights terakhir. Dia dikenal dengan Phoenix api abadi yang di takuti oleh banyak orang. Karakternya sangat mirip dengagn Eileene, tegas pemberani, pantang menyerah, namun agak sedikit centil. Eileene adalah rival sekaligus melatihnya dalam battle. Ikatan mereka bahkan menjadi lebih kuat sudah seperti saudara. Rachel berkuasa di Blazing Desert.',
+                elem: 'Fire', weap: 'Sword', 
+                mission: '- Bantu semua orang yang dalam kesusahan.\n- Temani Eileene di setiap misinya.',
+                missionSecret: "Koleksi semua artefak kuno yang ada di tanah Gaia (+1 bar pasif).",
+                passivePoin: 6, passiveDetail: 'Memulihkan HP sebesar 100%.'
+            },
+            'Vanessa': { 
+                name: 'Vanes', nameFemale: 'Vanessa', origin: 'female', title: 'Time Traveler', pass: '2000',  role: 'hero',
+                money: 20000,
+                img: '7k/Vanessa_f.webp',
+                imgFemale: '7k/Vanessa_m.webp',
+                icon: '7k/Vanessa.webp',
+                hp: 170, atk: 25, spd: 1,
+                desc: 'Vanessa adalah ksatria baru yang bergabung di Seven Knights yang menggantikan salah satu dari Original Seven Knights. Dia adalah seoarang penyihir waktu yang dapat mengendalikan waktu dengan magic yang kuat bahkan dengan kekuatannya dia bisa menempati posisi ke-3 terkuat di Seven Knights. Karakternya baik, tenang, dan tidak tegesa-gesa. Hubungan nya sangat dekat dengan Eileene dan Rachel. Vanessa berkuasa di Windringer.',
+                elem: 'Dark & Earth', weap: 'Catalyst', mission: 'Jaga Eileene dan Rachel.',
+                missionSecret: "Bantu Rachel untuk mengumpulkan artefak (+10.000 koin per artefak).",
+                passivePoin: 4, passiveDetail: 'Dapat menemukan artefak-artefak kuno dan cara mendapatkannya.'
+            },
+            'Teo': { 
+                name: 'Teo', nameFemale: 'Tea', title: 'Night Crow', pass: '2000', role: 'villain',
+                money: 20000,
+                img: '7k/Teo_m.webp',
+                imgFemale: '7k/Teo_f.webp',
+                icon: '7k/Teo.webp',
+                hp: 170, atk: 40, spd: 50,
+                desc: 'Teo adalah raja penguasa di sisi lain di tanah Gaia di Benua Aisha tepatnya di bagian Utara. Bersama dengan 3 pemimpin lainnya mereka disebut 4 Four Lords. Kemampuannya dalam berpedang di kenal sebagai yang terhebat di seluruh Gaia. Dia memiliki seorang murid bernama Ace. Karakternya baik, bijak, dan sangat tenang. Namun tidak segan menghukum apapun yang menyalahi aturan.',
+                elem: 'Dark & Fire', weap: 'Sword', mission: '- Patuh kepada Raja Pascal.;Amati semua hal yang mencurigakan.',
+                missionSecret: "Bunuh semua ksatria Seven Knights (100.000 koin per orang).",
+                passivePoin: 2, passiveDetail: 'Selamat dari serangan fatal tanpa mengurangi HP nya.'
+            },
+            'Karma': { 
+                name: 'Karma', nameFemale: 'Karmi', title: 'The Eternal Sage', pass: '2000', role: 'villain',
+                money: 20000,
+                img: '7k/Karma_m.webp',
+                imgFemale: '7k/Karma_f.webp',
+                icon: '7k/Karma.webp',
+                hp: 210, atk: 20, spd: 1,
+                desc: 'Karma adalah raja penguasa di sisi lain di tanah Gaia di Benua Aisha tepatnya di bagian Timur. Bersama dengan 3 pemimpin lainnya mereka disebut 4 Four Lords. Karma petapa sakti yang cinta damai, ia menggunakan kekuatan batin Psychic dan Telepati yang kuat. Dia memiliki kekasih yaitu Rin, dengan beda umur 500 tahun. Karakternya bijak, tenang dan sangat sabar. Dia selalu menutup kedua matanya, jika matanya  terbuka maka semua kekuatan yang terkunci akan terlepas dan membuatnya menjadi sangat brutal.',
+                elem: 'Dark', weap: 'Tongkat Staff', mission: '- Selalu lindungi Rin apapun konsekuensinya.',
+                missionSecret: "Sebisa mungkin hindari setiap pertarungan (+1 bar per battle).",
+                passivePoin: 1, passiveDetail: 'Membuka mata mu untuk menaikkan atk +20.'
+            },
+            'Rin': { 
+                name: 'Ren', nameFemale: 'Rin', origin: 'female', title: 'Dragon Empress', pass: '2000', role: 'villain',
+                money: 20000,
+                img: '7k/Rin_f.webp',
+                imgFemale: '7k/Rin_m.webp',
+                icon: '7k/Rin.webp',
+                hp: 160, atk: 50, spd: 10,
+                desc: 'Rin adalah ratu penguasa di sisi lain di tanah Gaia di Benua Aisha tepatnya di bagian Barat. Bersama dengan 3 pemimpin lainnya mereka disebut 4 Four Lords. Rin merupakan pemimpin terkuat dari semua pemimpin Four Lords lainnya. Dia memiliki seekor naga kuno yang selalu ada disampingnya. Karma adalah kekasihnya. Karakternya lugu, lugas dan juga tegas. Namun kepolosannya sering di manfaatkan oleh orang lain.',
+                elem: 'Fire-Water-Lighting', weap: '-', mission: '- Patuh kepada Raja Pascal.\n- Lindungi Karma.;Jaga keutuhan Four Lords.',
+                missionSecret: "Kalahkan Seven Knights (+50.000 per orang).",
+                passivePoin: 1, passiveDetail: 'Menaikkan atk nya sendiri +50.'
+            },
+            'Ace': { 
+                name: 'Ace', nameFemale: 'Acey', title: 'Moonlight Master', pass: '2000', role: 'villain',
+                money: 20000,
+                img: '7k/Ace_m.webp',
+                imgFemale: '7k/Ace_f.webp',
+                icon: '7k/Ace.webp',
+                hp: 150, atk: 20, spd: 10,
+                desc: 'Ace adalah ratu penguasa di sisi lain di tanah Gaia di Benua Aisha tepatnya di bagian Selatan. Bersama dengan 3 pemimpin lainnya mereka disebut 4 Four Lords. Teo adalah gurunya, dia melatih seni pedang nya dan ingin lebih kuat dari Teo. Ciri khasnya dalam  pertarungan adalah munculnya pohon sakura besar yang kelopak bunga nya berguguran pada saat bulan purnama. Karakternya baik, ramah namun masih sedikit naif. Dia sangat tidak suka adanya kekerasan untuk menyelesaikan suatu masalah.',
+                elem: 'Dark', weap: 'Sword', mission: '- Jaga wilayahmu dari penyusup.\n- Bantu Teo di setiap kesempatan.',
+                missionSecret: "Kalahkan Kyle, bos bandit yang mengacau. (+1 bar pasif).",
+                passivePoin: 2, passiveDetail: 'Memulihkan HP sebesar +50, Meningkatkan atk +20 ke dirinya sendiri dan semua rekan di sekitarnya.'
+            },
+            'Mercure': { 
+                name: 'Mercure', nameFemale: 'Mercuria', title: 'Dark Knight', pass: '2000', role: 'villain',
+                money: 20000,
+                img: '7k/Mercure_m.webp',
+                imgFemale: '7k/Mercure_f.webp',
+                icon: '7k/Mercure.webp',
+                hp: 220, atk: 30, spd: 10,
+                desc: 'Mercure adalah ksatria yang haus akan kekuatan dan validasi. Dia juga seorang ilmuan gila yang bekerja sama dengan Bai Jiao dan Pascal untuk menguasai dunia Gaia. Seumur hidup nya adalah mencari akar dari kekuatan Abyss agar dapat menyerap dan menguasainya. Dia sangat benci dengan para Seven Knights, karena mereka selalu menggagalkan semua rencanya. Karakternya pintar, cerdik, licik, dan sangat kejam. Dia tinggal di wilayah Central Aisha, di tengah-tengah 4 wilayah kekuasaan Four Lords, yaitu Emperor\'s Palace.',
+                elem: 'Dark', weap: 'Sword', mission: '- Bekerja sama dengan Bai Jiao dan Pascal.\n- Basmi para Seven Knights.',
+                missionSecret: "Bunuh para Seven Knights setiap berjumpa (+100.000 koin & +1 bar pasif per orang).",
+                passivePoin: 1, passiveDetail: 'Menciptakan portal untuk berteleportasi kemanapun, jika dipakai untuk kabur dari pertarungan tidak perlu melempar dadu.'
+            },
+            'Dellons': { 
+                name: 'Dellons', nameFemale: 'Dellona', title: 'Knight of Doom', pass: '2000', role: 'villain',
+                money: 20000,
+                img: '7k/Dellon_m.webp',
+                imgFemale: '7k/Dellon_f.webp',
+                icon: '7k/Dellon.webp',
+                hp: 190, atk: 30, spd: 10,
+                desc: 'Setelah kedok dan tujuan aslinya ketahuan, Dellons keluar dari Seven Knights dan melarikan diri ke Benua Aisha untuk meminta bantuan dan bekerja sama dengan Mercure, Bai Jiao dan Pascal. Mereka semua menyusun rencana untuk mendapatkan kekuatan penghancur terbesar, yaitu Kekuatan Abyss. Dellons sekarang tinggal di wilayah Central Aisha.',
+                elem: 'Dark', weap: 'Scythe & Sword', mission: '- Kuasai kekuatan Abyss sendirian.\n- Bekerja sama dengan Mercure, Bai Jiao dan Pascal untuk mendapatkan tujuan mu.; Berkhianat bila di perlukan.',
+                missionSecret: "Dapatkan semua fragment Abyss yang ada (+200.000 koin & +1 bar pasif per fragment).",
+                passivePoin: 1, passiveDetail: 'Menaikkan atk mu sendiri sebanyak +100.'
+            },
+            'Bai Jiao': { 
+                name: 'Bai Jiao', nameFemale: 'Bai Jia', title: 'Evil Strategist', pass: '2000', role: 'villain',
+                money: 20000,
+                img: '7k/Baijiao_m.webp',
+                imgFemale: '7k/Baijiao_f.webp',
+                icon: '7k/Bai_Jiao.webp',
+                hp: 100, atk: 10, spd: 20,
+                desc: 'Bai Jiao adalah penasehat Kaisar Pascal dan seorang scientist yang terkenal dengan kegilaan dan keanehan yang ia lakukan. Dia juga berperan sebagai ahli strategi yang sangat licik dan berbahaya.',
+                elem: 'Dark', weap: 'Catalyst', mission: '- Bekerja sama dengan Mercure, Dellons dan Pascal.; - Jangan sampai tertangkap, keselamatan adalah yang utama.',
+                missionSecret: "Hasut Pascal untuk melakukan apa yang kau mau, karena Pascal hanya alat bagimu.; Tidak ada alasan untuk tidak berkhianat jika sudah tidak menguntungkan.",
+                passivePoin: 5, passiveDetail: 'Mendapatkan mata dadu terbesar, bisa digunakan untuk semua situasi.'
+            },
+            'Pascal': { 
+                name: 'Pascal', nameFemale: 'Pascaline', title: 'Emperor of Abyss', pass: '2000', role: 'villain',
+                money: 100000,
+                img: '7k/Pascal_m.webp',
+                imgFemale: '7k/Pascal_f.webp',
+                icon: '7k/Pascal.webp',
+                hp: 500, atk: 200, spd: 0,
+                desc: 'Pascal adalah Kaisar tertinggi di Benua Aisha. Bahkan para Four Lords tunduk kepadanya. Pascal memerintah di ibukota Central Aisha, dan memiliki kastilnya sendiri Emperor\'s Palace. Karakternya kejam dan haus akan kekuasaan. Pascal sangat bergantung kepada penasehatnya yaitu Bai Jiao untuk setiap tindakan yang ia akan lakukan.',
+                elem: 'Dark', weap: 'Tongkat Staff', mission: '- Kumpulkan semua fragment Abyss.\n- Hancurkan semua yang menghalangi.',
+                missionSecret: "Serap seluruh kekuatan Abyss sepenuhnya (WIN THE GAME).",
+                passivePoin: 10, passiveDetail: 'Ciptakan 1 monster dengan HP +200 dan ATK +100 untuk berada di sisimu.'
+            }
+        };
+
+        // --- TARUH DI SINI (Paling Atas Script) ---
+const DATABASE_URL = "https://script.google.com/macros/s/AKfycbwlmJG0fmzanv8JzmVnLa9ordm3hBJC5mSiwpXUOrmSqJcVwm7hmuUgaXlJpxzXWfTf/exec";
+let heroes = []; 
+
+async function loadData() {
+    try {
+        const response = await fetch(DATABASE_URL);
+        heroes = await response.json();
+        // Update data objek agar fungsi lama kamu tidak rusak
+        heroes.forEach(h => {
+            data[h.id] = h;
+        });
+        render();
+        loadIcons();
+    } catch (err) { console.log("Gagal sinkron"); }
+}
+// Ambil data tiap 5 detik
+setInterval(loadData, 5000);
+        
+        let key = 'JEMBOT_KUDA'; 
+        let chatKey = 'SK_CHAT_STORAGE';
+        let savedData = localStorage.getItem(key);
+        let data = { ...initialHeroes };
+        
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            Object.keys(parsed).forEach(k => {
+                if (data[k]) data[k] = { ...data[k], ...parsed[k] };
+            });
+        }
+        
+        let chatData = JSON.parse(localStorage.getItem(chatKey)) || [];
+        let current = null;
+        let isGM = localStorage.getItem('roleGM') === 'true';
+        let heroSandiTujuan = null;
+        let isChatOpen = false;
+
+        function loadIcons() {
+            const grid = document.getElementById('icon-grid');
+            const targetSelect = document.getElementById('chat-target');
+            const selectedBefore = targetSelect ? targetSelect.value : null;
+
+            if (grid) grid.innerHTML = '';
+            if (targetSelect) {
+                targetSelect.innerHTML = isGM ? '' : '<option value="GM">HUBUNGI GM (MASTER)</option>';
+            }
+
+            Object.keys(data).forEach(k => {
+    const h = data[k];
+    
+    // --- 1. LOGIKA STATUS ---
+    const statusHero = h.status || "";
+    const hasStatus = statusHero !== "" && statusHero.toUpperCase() !== "NORMAL";
+
+    const wrapper = document.createElement('div');
+    wrapper.style.textAlign = 'center';
+    wrapper.style.cursor = 'pointer';
+    wrapper.style.position = 'relative'; // Penting agar teks status bisa di tengah
+
+    // --- 2. GAMBAR IKON ---
+    const img = document.createElement('img');
+    img.src = h.icon;
+    // Jika ada status, gambar akan meredup (class is-statused)
+    img.className = 'hero-icon' + (h.role === 'villain' ? ' villain' : '') + (hasStatus ? ' is-statused' : '');
+    img.onclick = () => bukaModalSandi(k);
+    wrapper.appendChild(img);
+
+    // --- 3. TEKS STATUS (Hanya muncul jika tidak NORMAL) ---
+    if (hasStatus) {
+        const statusOverlay = document.createElement('div');
+        statusOverlay.innerText = statusHero.toUpperCase();
+        statusOverlay.className = 'status-overlay'; // CSS-nya sudah saya kasih di pesan sebelumnya
+        statusOverlay.style.color = (h.role === 'villain' ? '#d187ff' : 'gold');
+        wrapper.appendChild(statusOverlay);
+    }
+
+    // --- 4. LABEL NAMA ---
+    const label = document.createElement('span');
+    label.innerText = (h.origin === 'female') ? h.nameFemale : h.name;
+    label.className = 'hero-label'; 
+    label.style.color = (h.role === 'villain' ? '#d187ff' : 'gold');
+    label.style.display = 'block'; // Agar nama di bawah gambar
+    wrapper.appendChild(label);
+
+    if (grid) grid.appendChild(wrapper);
+
+    // --- 5. LOGIKA DROPDOWN CHAT (TIDAK BERUBAH) ---
+    if (targetSelect) {
+        if (isGM || k !== current) {
+            const myId = isGM ? "GM" : current;
+            const hasUnread = chatData.some(m => m.from === k && m.to === myId && m.read === false);
+            const opt = document.createElement('option');
+            opt.value = k;
+            let prefix = isGM ? "USER: " : "KE: ";
+            let mark = hasUnread ? " ❗" : "";
+            opt.innerText = prefix + h.name.toUpperCase() + mark;
+            targetSelect.appendChild(opt);
+        }
+    }
+});
+
+            if (targetSelect && selectedBefore) {
+                targetSelect.value = selectedBefore;
+            }
+        }
+
+        function bukaModalSandi(idHero) {
+            // JIKA GM: Langsung buka tanpa sandi
+            if (isGM) {
+                current = idHero;
+                render(true);
+                return;
+            }
+
+            // JIKA PLAYER: Tetap minta sandi
+            heroSandiTujuan = idHero;
+            const h = data[idHero];
+            const isV = h.role === 'villain';
+            const themeColor = isV ? '#d187ff' : 'gold';
+            const btnColor = isV ? '#d187ff' : 'gold';
+            const btnText = isV ? 'white' : 'black';
+
+            document.getElementById('modal-title').innerText = "Sandi " + h.name;
+            document.getElementById('modal-title').style.color = themeColor;
+
+            const modalContent = document.querySelector('#password-modal > div');
+            if (modalContent) {
+                modalContent.style.borderColor = themeColor;
+                modalContent.style.boxShadow = `0 0 20px ${isV ? 'rgba(209, 135, 255, 0.3)' : 'rgba(255, 215, 0, 0.2)'}`;
+            }
+
+            const okBtn = document.querySelector('#password-modal button[onclick="cekSandi()"]');
+            if (okBtn) {
+                okBtn.style.background = btnColor;
+                okBtn.style.color = btnText;
+            }
+
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('sandi-input').value = ""; 
+            document.getElementById('sandi-input').focus();
+        }
+
+        function closeModal() { document.getElementById('password-modal').style.display = 'none'; }
+
+        function cekSandi() {
+            if(document.getElementById('sandi-input').value === data[heroSandiTujuan].pass) { 
+                current = heroSandiTujuan;
+                localStorage.setItem('heroLagiLogin', current); 
+                // Matikan status GM kalau player login biasa
+                isGM = false;
+                localStorage.removeItem('roleGM');
+                
+                closeModal();
+                loadIcons(); // Refresh dropdown
+                render(true); 
+                renderChat();
+            } else { alert("Sandi Salah!"); }
+        }
+
+        function loginGM() { document.getElementById('gm-modal').style.display = 'flex'; }
+        function closeGMModal() { document.getElementById('gm-modal').style.display = 'none'; }
+        function logoutGM() { 
+            localStorage.removeItem('roleGM'); 
+            localStorage.removeItem('heroLagiLogin');
+            location.reload(); 
+        }
+
+        function cekGMLogin() {
+            if(document.getElementById('gm-input').value === "291298") { 
+                isGM = true; 
+                localStorage.setItem('roleGM', 'true');
+                localStorage.removeItem('heroLagiLogin'); 
+                
+                // --- TAMBAHKAN INI ---
+                if (document.getElementById('chat-bubble')) document.getElementById('chat-bubble').style.display = 'flex';
+                
+                alert("Master Access Granted."); 
+                location.reload();
+            } else { alert("Wrong Code!"); }
+        }
+
+        function render(autoScroll = false) {
+    if (!current || !data[current]) return;
+    const bubble = document.getElementById('chat-bubble');
+            if (bubble) bubble.style.display = 'flex';
+    const h = data[current];
+    const panel = document.getElementById('detail-panel');
+    
+    // Tentukan Warna Tema
+    const isV = h.role === 'villain';
+    const themeColor = isV ? '#d187ff' : 'gold';
+
+    panel.style.display = 'block';
+    panel.className = isV ? 'panel-villain' : '';
+    
+    // 1. Update Bingkai Panel & Teks Detail
+    panel.style.borderColor = isV ? '#a335ee' : 'gold';
+    document.getElementById('name-display').style.color = themeColor;
+    document.getElementById('elem-display').style.color = themeColor;
+    document.getElementById('weap-display').style.color = themeColor;
+
+    h.origin === 'female' ? setGender('female') : setGender('male');
+
+    document.getElementById('desc-display').innerText = h.desc || "No Description";
+    document.getElementById('elem-display').innerText = h.elem || "N/A";
+    document.getElementById('weap-display').innerText = h.weap || "N/A";
+    
+    // 2. Update Bingkai Samping Box Deskripsi (PENTING)
+    const infoBox = document.querySelector('.info-box');
+    if(infoBox) {
+        infoBox.style.borderLeftColor = themeColor;
+        infoBox.style.borderRightColor = themeColor;
+    }
+    
+    // 3. Update List Mission
+    const missionUl = document.getElementById('mission-display');
+    const secretUl = document.getElementById('secret-mission-display');
+    missionUl.innerHTML = "";
+    if(secretUl) secretUl.innerHTML = "";
+    
+    const missions = (h.mission || "").split(/[-;\n]/).filter(m => m.trim() !== "");
+    missions.forEach(m => {
+        const li = document.createElement('li');
+        li.innerText = "• " + m.trim();
+        missionUl.appendChild(li);
+    });
+    
+    if(secretUl) {
+        const secretMissions = (h.missionSecret || "").split(/[-;\n]/).filter(m => m.trim() !== "");
+        secretMissions.forEach(m => {
+            const li = document.createElement('li');
+            li.innerText = "• " + m.trim();
+            secretUl.appendChild(li);
+        });
+    }
+
+    // 4. Update Bingkai & Judul Mission Box (PENTING)
+    const missionWrapper = document.getElementById('mission-content-wrapper');
+    if (missionWrapper) {
+        missionWrapper.style.borderColor = themeColor;
+        const parentBox = missionWrapper.closest('.mission-box');
+        if(parentBox) parentBox.style.borderColor = themeColor;
+    }
+
+    const allTitles = document.querySelectorAll('.mission-title');
+    allTitles.forEach(t => {
+        t.style.color = themeColor;
+        t.style.borderBottomColor = themeColor;
+    });
+
+    // 5. Update Status & Pasif
+    updateUI('money', h.money || 0);
+    updateUI('hp', h.hp);
+    updateUI('atk', h.atk);
+    updateUI('spd', h.spd);
+    
+    const pasPoin = h.passivePoin || 0;
+    document.getElementById('pas-val').innerText = pasPoin + "/10";
+    const mastCont = document.getElementById('mastery-container');
+    if(mastCont) {
+                mastCont.innerHTML = "";
+                for(let i=1; i<=10; i++) {
+                    const div = document.createElement('div');
+                    // Biarkan CSS yang menangani warnanya (otomatis hijau dari class .active)
+                    div.className = 'm-bar' + (i <= pasPoin ? ' active' : '');
+                    mastCont.appendChild(div);
+                }
+            }
+    document.getElementById('pas-detail-display').innerText = h.passiveDetail || "...";
+
+    // 6. GM Areas & Scroll
+    const gmAreas = document.querySelectorAll('.gm-edit-area, #gm-money-row, #gm-hp-row, #gm-atk-row, #gm-spd-row, #gm-pas-row');
+    gmAreas.forEach(a => a.style.display = isGM ? 'flex' : 'none');
+
+    if (isGM) {
+        document.getElementById('in-mission').value = h.mission || "";
+        document.getElementById('in-secret').value = h.missionSecret || ""; 
+        document.getElementById('in-name-m').value = h.name || "";
+        document.getElementById('in-name-f').value = h.nameFemale || "";
+        document.getElementById('in-title').value = h.title || "";
+        document.getElementById('in-pass').value = h.pass || "";
+        document.getElementById('in-status').value = h.status || "";
+    }
+
+    if(autoScroll) {
+        panel.scrollIntoView({behavior:'smooth'});
+    }
+}
+
+        function updateUI(type, val) {
+            const txtEl = document.getElementById(type + '-txt');
+            const barEl = document.getElementById(type + '-bar');
+            if(txtEl) txtEl.innerText = val.toLocaleString();
+            if(barEl) barEl.style.width = Math.min((val / 500 * 100), 100) + "%";
+        }
+
+        // Fungsi untuk kirim data ke Google Sheets (WAJIB ADA)
+async function saveToCloud(heroData) {
+    try {
+        await fetch(DATABASE_URL, {
+            method: 'POST',
+            body: JSON.stringify(heroData)
+        });
+        console.log("Data Berhasil Sinkron ke Google Sheets!");
+    } catch (err) {
+        console.error("Gagal kirim data ke server!");
+    }
+}
+
+// FUNGSI SAVE BARU (SESUAI DAFTAR KOLOM YANG KAMU KASIH)
+function save(type) {
+    if (!isGM) return;
+    const hero = heroes.find(h => h.id === currentHeroId);
+    if (!hero) return;
+
+    // Ambil input dari box edit GM kamu
+    const inputEl = document.getElementById('edit-val'); 
+    const val = inputEl.value;
+
+    // SINKRONISASI ANTARA KODE DAN KOLOM DOCS
+    if (type === 'hp') hero.hp = parseInt(val);
+    else if (type === 'atk') hero.atk = parseInt(val);
+    else if (type === 'regen') hero.regen = parseInt(val);
+    else if (type === 'money') hero.gold = parseInt(val); // Sesuai kolom 'gold'
+    else if (type === 'status') hero.status = val.toUpperCase();
+    else if (type === 'nameM') hero.nameM = val;
+    else if (type === 'nameF') hero.nameF = val;
+    else if (type === 'title') hero.title = val;
+    else if (type === 'pass') hero.pass = val;
+    else if (type === 'desc') hero.desc = val;
+    else if (type === 'element') hero.element = val;
+    else if (type === 'weapon') hero.weapon = val;
+    else if (type === 'mainObjective') hero.misi1 = val; // Sesuai kolom 'misi1'
+    else if (type === 'secret') hero.misi2 = val;        // Sesuai kolom 'misi2'
+    else if (type === 'pasif') hero.pasif = val;
+    else if (type === 'detailPasif') hero.detailP = val; // Sesuai kolom 'detailP'
+
+    // 1. Simpan ke Google Sheets (Biar semua HP berubah)
+    saveToCloud(hero);
+    
+    // 2. Simpan cadangan di LocalStorage HP kamu sendiri
+    localStorage.setItem('SK_HEROES_DATA', JSON.stringify(heroes));
+
+    // 3. Update tampilan & tutup box edit
+    closeEdit();
+    render();
+    inputEl.value = ""; 
+}
+
+        function saveExtra(mode) {
+    if(!isGM || !current) return;
+    
+    const hero = data[current]; // Ambil data karakter yang lagi diedit
+
+    if(mode === 'info') {
+        hero.desc = document.getElementById('in-desc').value || hero.desc;
+        hero.element = document.getElementById('in-elem').value || hero.element;
+        hero.weapon = document.getElementById('in-weap').value || hero.weapon;
+    } else if(mode === 'mission') {
+        // SINKRON DENGAN KOLOM: misi1 & misi2
+        hero.misi1 = document.getElementById('in-mission').value;
+        hero.misi2 = document.getElementById('in-secret').value;
+    } else if(mode === 'passiveDetail') {
+        // SINKRON DENGAN KOLOM: detailP
+        hero.detailP = document.getElementById('in-pas-detail').value || hero.detailP;
+    } else if(mode === 'identity') {
+        // SINKRON DENGAN KOLOM: nameM, nameF, title, pass, status
+        hero.nameM = document.getElementById('in-name-m').value || hero.nameM;
+        hero.nameF = document.getElementById('in-name-f').value || hero.nameF;
+        hero.title = document.getElementById('in-title').value || hero.title;
+        hero.pass = document.getElementById('in-pass').value || hero.pass;
+        hero.status = document.getElementById('in-status').value;
+        loadIcons();
+    }
+
+    // 1. KIRIM KE GOOGLE SHEETS (Biar Online)
+    saveToCloud(hero);
+
+    // 2. Simpan cadangan di HP sendiri
+    localStorage.setItem(key, JSON.stringify(data));
+    
+    alert("Data " + mode.toUpperCase() + " Berhasil Sinkron ke Sheets!");
+    render(false);
+}
+
+        function setGender(g) {
+            if (!current) return;
+            const h = data[current];
+            const isV = h.role === 'villain';
+            data[current].origin = g;
+            document.getElementById('title-display').innerText = h.title || "No Title";
+            document.getElementById('name-display').innerText = (g === 'male') ? h.name : h.nameFemale;
+            document.getElementById('portrait').src = (g === 'male') ? h.img : h.imgFemale;
+            document.getElementById('btn-male').className = (g === 'male') ? (isV ? 'gender-btn active-v' : 'gender-btn active') : 'gender-btn';
+            document.getElementById('btn-female').className = (g === 'female') ? (isV ? 'gender-btn active-v' : 'gender-btn active') : 'gender-btn';
+        }
+
+        // --- LIVE CHAT ---
+        function toggleChat() {
+            isChatOpen = !isChatOpen;
+            const chatWin = document.getElementById('chat-window');
+            const targetSelect = document.getElementById('chat-target');
+            const myId = isGM ? "GM" : current;
+
+            if (isChatOpen) {
+                chatWin.style.display = 'flex';
+                document.getElementById('chat-notif').style.display = 'none';
+                const unreadSenders = [...new Set(chatData
+                    .filter(m => m.to === myId && m.read === false)
+                    .map(m => m.from))];
+
+                if (unreadSenders.length > 0) {
+                    targetSelect.value = unreadSenders[0];
+                }
+                renderChat();
+            } else {
+                chatWin.style.display = 'none';
+            }
+        }
+
+        function sendChat() {
+            const input = document.getElementById('chat-input');
+            const target = document.getElementById('chat-target').value;
+            const myId = isGM ? "GM" : current;
+            const myName = isGM ? "MASTER GM" : (current ? data[current].name : "GUEST");
+            if(!input.value.trim()) return;
+            const msg = {
+                id: Date.now(), 
+                from: myId, 
+                fromName: myName, 
+                to: target,
+                text: input.value, 
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                read: false
+            };
+            chatData.push(msg);
+            localStorage.setItem(chatKey, JSON.stringify(chatData));
+            input.value = "";
+            renderChat();
+        }
+
+        let idPesanYangMauDihapus = null;
+        function hapusChat(msgId) {
+            idPesanYangMauDihapus = msgId;
+            document.getElementById('confirm-modal').style.display = 'flex';
+        }
+        function tutupConfirm() {
+            document.getElementById('confirm-modal').style.display = 'none';
+            idPesanYangMauDihapus = null;
+        }
+        function eksekusiHapus() {
+            if(idPesanYangMauDihapus !== null) {
+                chatData = JSON.parse(localStorage.getItem(chatKey)) || [];
+                chatData = chatData.filter(m => m.id !== idPesanYangMauDihapus);
+                localStorage.setItem(chatKey, JSON.stringify(chatData));
+                renderChat();
+            }
+            tutupConfirm();
+        }
+
+        function renderChat() {
+            const list = document.getElementById('msg-list');
+            if (!list) return;
+            const myId = isGM ? "GM" : current;
+            const target = document.getElementById('chat-target').value;
+            
+            chatData.forEach(m => {
+                if (m.from === target && m.to === myId) m.read = true;
+            });
+            localStorage.setItem(chatKey, JSON.stringify(chatData));
+
+            list.innerHTML = "";
+            const filtered = chatData.filter(m => {
+                return (m.from === myId && m.to === target) || (m.from === target && m.to === myId);
+            });
+
+            filtered.forEach(m => {
+                const isMe = m.from === myId;
+                const div = document.createElement('div');
+                div.className = `msg ${isMe ? 'msg-me' : 'msg-other'}`;
+                div.innerHTML = `<span class="msg-info">${m.fromName} • ${m.time} <b onclick="hapusChat(${m.id})" style="color:red; cursor:pointer; margin-left:10px;">[x]</b></span>${m.text}`;
+                list.appendChild(div);
+            });
+
+            const body = document.getElementById('chat-body');
+            if (body) body.scrollTop = body.scrollHeight;
+        }
+
+        function updateChatNotif() {
+            if(isChatOpen) return;
+            const myId = isGM ? "GM" : current;
+            const unreadCount = chatData.filter(m => m.to === myId && m.read === false).length;
+            const notif = document.getElementById('chat-notif');
+            if(notif) {
+                if(unreadCount > 0) {
+                    notif.innerText = unreadCount;
+                    notif.style.display = 'flex';
+                } else {
+                    notif.style.display = 'none';
+                }
+            }
+        }
+
+        setInterval(() => {
+            chatData = JSON.parse(localStorage.getItem(chatKey)) || [];
+            if(isChatOpen) {
+                renderChat();
+            } else {
+                updateChatNotif();
+            }
+            loadIcons(); 
+        }, 2000);
+
+        // ONLOAD UNTUK MENJAMIN SEMUA ELEMENT MUNCUL
+        window.onload = () => {
+    loadIcons();
+    
+    const bubble = document.getElementById('chat-bubble');
+    const loginBtn = document.getElementById('btn-login-gm'); // Target ID baru
+    const logoutBtn = document.getElementById('btn-logout-gm');
+    const storyBtn = document.getElementById('gm-story-btn');
+
+    if (isGM) {
+        // Jika status Master/GM aktif
+        if (bubble) bubble.style.display = 'flex';
+        if (loginBtn) loginBtn.style.display = 'none'; // Tombol Login HILANG
+        if (logoutBtn) logoutBtn.style.display = 'block'; // Tombol Logout MUNCUL
+        if (storyBtn) storyBtn.style.display = 'block';
+    } else if (current) {
+        // Jika hanya player biasa yang login
+        if (bubble) bubble.style.display = 'flex';
+        if (loginBtn) loginBtn.style.display = 'block'; // Tombol Login tetap ada
+        if (logoutBtn) logoutBtn.style.display = 'none';
+    } else {
+        // Belum login sama sekali
+        if (bubble) bubble.style.display = 'none';
+        if (loginBtn) loginBtn.style.display = 'block';
+    }
+    
+    if (current) render();
+};
+
+        function toggleStory() {
+            const box = document.getElementById('story-box');
+            const btn = document.getElementById('gm-story-btn');
+            if (box.style.display === 'none' || box.style.display === '') {
+                box.style.display = 'block';
+                btn.innerText = '❌ CLOSE STORY';
+                box.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                box.style.display = 'none';
+                btn.innerText = '📖 OPEN STORY MODE';
+            }
+        }
+
+        function toggleMission() {
+            const wrapper = document.getElementById('mission-content-wrapper');
+            if (wrapper.style.display === 'none' || wrapper.style.display === '') {
+                wrapper.style.display = 'block';
+            } else {
+                wrapper.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

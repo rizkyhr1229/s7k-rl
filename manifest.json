@@ -1,0 +1,16 @@
+{
+  "name": "Seven Knights RPG Data",
+  "short_name": "SK-RPG",
+  "description": "Database Hero Seven Knights Online",
+  "start_url": "rlgame00.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#gold",
+  "icons": [
+    {
+      "src": "7k/Rudy.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    }
+  ]
+}
