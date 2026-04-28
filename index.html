@@ -5,15 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
     <title>Seven Knights - Ultimate Guide</title>
-    <link rel="manifest" href="manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="gold">
     <style>
-    * {
-    -webkit-tap-highlight-color: transparent;
-    outline: none;
-}
         /* CSS ASLI TIDAK DIUBAH */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -39,7 +31,7 @@
             animation: float 3s ease-in-out infinite; margin-bottom: 40px; 
         }
 
-        .icon-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-bottom: 0; width: 100%; max-width: 1000px; }
+        .icon-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-bottom: 10px; width: 100%; max-width: 1000px; }
         
         .hero-icon { 
             width: 75px; height: 75px; border-radius: 50%; cursor: pointer; 
@@ -59,7 +51,7 @@
             display: none; background: rgba(20, 20, 30, 0.95); backdrop-filter: blur(15px);
             padding: 25px; border-radius: 25px; max-width: 450px; width: 100%;
             border: 2px solid gold; box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
-            text-align: center; margin-bottom: 5px;
+            text-align: center; margin-bottom: 50px;
         }
         #detail-panel.panel-villain { border-color: #a335ee; }
 
@@ -140,7 +132,7 @@
             background: rgba(10, 10, 20, 0.95);
             backdrop-filter: blur(8px);
             border: 2px solid gold;
-            padding: 12px 18px;
+            padding: 25px;
             border-radius: 20px;
             width: 90%;
             max-width: 500px;
@@ -148,7 +140,7 @@
             color: #e0e0e0; 
             font-family: 'Segoe UI', Tahoma, sans-serif;
             box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 15px rgba(255, 215, 0, 0.1);
-            line-height: 1.5;
+            line-height: 1.8;
             text-align: justify;
             white-space: pre-line;
         }
@@ -464,7 +456,7 @@
 
     <center>
         <button id="btn-login-gm" onclick="loginGM()" style="margin-top:20px; background:none; border:1px solid #333; color:#555; padding:5px 10px; border-radius:5px; font-size:10px; cursor:pointer;">MODE GM</button>
-        <button id="btn-logout-gm" onclick="logoutGM()" style="display:none; margin-top:0; background:none; border:1px solid #333; color:#555; padding:5px 10px; border-radius:5px; font-size:10px; cursor:pointer; padding:6px 12px;">KELUAR MODE GM</button>
+        <button id="btn-logout-gm" onclick="logoutGM()" style="display:none; margin-top:-10px; margin-bottom:50px; background:none; border:1px solid #333; color:#555; padding:5px 10px; border-radius:5px; font-size:10px; cursor:pointer;">KELUAR MODE GM</button>
     </center>
 
     <script>
@@ -535,8 +527,8 @@
             'Eileene': { 
                 name: 'Eilen', nameFemale: 'Eileene', origin: 'female', title: 'Fodina Empress', pass: '2000', role: 'hero',
                 money: 20000,
-                img: '7k/Eileene_m.webp',
-                imgFemale: '7k/Eileene_f.webp',
+                img: '7k/Eileene_f.webp',
+                imgFemale: '7k/Eileene_m.webp',
                 icon: '7k/Eileene.webp',
                 hp: 140, atk: 15, spd: 5,
                 desc: 'Eileene adalah ksatria terkuat ke-6 di Seven Knights. Dia adalah pemimpin dari tentara bayaran terbesar di tanah Gaia. Karakternya tegas, taat, pemberani dan pantang menyerah. Rachel adalah saudari angkat nya. Eileene berkuasa di Fodina Castle.',
@@ -548,8 +540,8 @@
             'Rachel': { 
                 name: 'Rach', nameFemale: 'Rachel', origin: 'female', title: 'Phoenix Flame', pass: '2000',  role: 'hero',
                 money: 20000,
-                img: '7k/Rachel_m.webp',
-                imgFemale: '7k/Rachel_f.webp',
+                img: '7k/Rachel_f.webp',
+                imgFemale: '7k/Rachel_m.webp',
                 icon: '7k/Rachel.webp',
                 hp: 120, atk: 15, spd: 100,
                 desc: 'Rachel adalah ksatria Seven Knights terakhir. Dia dikenal dengan Phoenix api abadi yang di takuti oleh banyak orang. Karakternya sangat mirip dengagn Eileene, tegas pemberani, pantang menyerah, namun agak sedikit centil. Eileene adalah rival sekaligus melatihnya dalam battle. Ikatan mereka bahkan menjadi lebih kuat sudah seperti saudara. Rachel berkuasa di Blazing Desert.',
@@ -561,8 +553,8 @@
             'Vanessa': { 
                 name: 'Vanes', nameFemale: 'Vanessa', origin: 'female', title: 'Time Traveler', pass: '2000',  role: 'hero',
                 money: 20000,
-                img: '7k/Vanessa_m.webp',
-                imgFemale: '7k/Vanessa_f.webp',
+                img: '7k/Vanessa_f.webp',
+                imgFemale: '7k/Vanessa_m.webp',
                 icon: '7k/Vanessa.webp',
                 hp: 170, atk: 25, spd: 1,
                 desc: 'Vanessa adalah ksatria baru yang bergabung di Seven Knights yang menggantikan salah satu dari Original Seven Knights. Dia adalah seoarang penyihir waktu yang dapat mengendalikan waktu dengan magic yang kuat bahkan dengan kekuatannya dia bisa menempati posisi ke-3 terkuat di Seven Knights. Karakternya baik, tenang, dan tidak tegesa-gesa. Hubungan nya sangat dekat dengan Eileene dan Rachel. Vanessa berkuasa di Windringer.',
@@ -597,8 +589,8 @@
             'Rin': { 
                 name: 'Ren', nameFemale: 'Rin', origin: 'female', title: 'Dragon Empress', pass: '2000', role: 'villain',
                 money: 20000,
-                img: '7k/Rin_m.webp',
-                imgFemale: '7k/Rin_f.webp',
+                img: '7k/Rin_f.webp',
+                imgFemale: '7k/Rin_m.webp',
                 icon: '7k/Rin.webp',
                 hp: 160, atk: 50, spd: 10,
                 desc: 'Rin adalah ratu penguasa di sisi lain di tanah Gaia di Benua Aisha tepatnya di bagian Barat. Bersama dengan 3 pemimpin lainnya mereka disebut 4 Four Lords. Rin merupakan pemimpin terkuat dari semua pemimpin Four Lords lainnya. Dia memiliki seekor naga kuno yang selalu ada disampingnya. Karma adalah kekasihnya. Karakternya lugu, lugas dan juga tegas. Namun kepolosannya sering di manfaatkan oleh orang lain.',
@@ -668,25 +660,7 @@
             }
         };
 
-        // --- TARUH DI SINI (Paling Atas Script) ---
-const DATABASE_URL = "https://script.google.com/macros/s/AKfycbwkd8ItyIUBmARekk1CcHW-_zBXFwcpvW2syqHw08j5I-S_1ySu3e1QlkZsQDlVhD-c/exec";
-let heroes = []; 
 
-async function loadData() {
-    try {
-        const response = await fetch(DATABASE_URL);
-        heroes = await response.json();
-        // Update data objek agar fungsi lama kamu tidak rusak
-        heroes.forEach(h => {
-            data[h.id] = h;
-        });
-        render();
-        loadIcons();
-    } catch (err) { console.log("Gagal sinkron"); }
-}
-// Ambil data tiap 5 detik
-setInterval(loadData, 5000);
-        
         let key = 'JEMBOT_KUDA'; 
         let chatKey = 'SK_CHAT_STORAGE';
         let savedData = localStorage.getItem(key);
@@ -872,8 +846,8 @@ setInterval(loadData, 5000);
     h.origin === 'female' ? setGender('female') : setGender('male');
 
     document.getElementById('desc-display').innerText = h.desc || "No Description";
-    document.getElementById('elem-display').innerText = h.element || "N/A";
-document.getElementById('weap-display').innerText = h.weapon || "N/A";
+    document.getElementById('elem-display').innerText = h.elem || "N/A";
+    document.getElementById('weap-display').innerText = h.weap || "N/A";
     
     // 2. Update Bingkai Samping Box Deskripsi (PENTING)
     const infoBox = document.querySelector('.info-box');
@@ -964,101 +938,72 @@ document.getElementById('weap-display').innerText = h.weapon || "N/A";
             if(barEl) barEl.style.width = Math.min((val / 500 * 100), 100) + "%";
         }
 
-        // Fungsi untuk kirim data ke Google Sheets (WAJIB ADA)
-async function saveToCloud(heroData) {
-    try {
-        await fetch(DATABASE_URL, {
-            method: 'POST',
-            body: JSON.stringify(heroData)
-        });
-        console.log("Data Berhasil Sinkron ke Google Sheets!");
-    } catch (err) {
-        console.error("Gagal kirim data ke server!");
-    }
+        // Ganti pake URL hasil deploy tadi
+const DATABASE_URL = "https://script.google.com/macros/s/AKfycbzESTcmJj5Dm4XUvOGMfKSckl0sGMon7l0t8iXltFKwLPf68JsjXv94X40f_COGTASY/exec";
+
+function saveToCloud(heroUpdate) {
+    fetch(DATABASE_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({ id: current, ...heroUpdate })
+    }).then(() => console.log("Cloud Updated"));
 }
 
 function save(type) {
     if (!isGM || !current) return;
+    let inputId = "";
+    if (type === 'money') inputId = "money-in";
+    else if (type === 'hp') inputId = "hp-in";
+    else if (type === 'atk') inputId = "atk-in";
+    else if (type === 'spd') inputId = "spd-in";
+    else if (type === 'passivePoin') inputId = "pas-in";
 
-    // 1. Cari data di array heroes (Sesuai kolom 'id')
-    const hero = heroes.find(h => h.id === current);
-    if (!hero) return;
+    const val = document.getElementById(inputId).value;
+    if (val === "") return;
+    const numVal = parseInt(val);
 
-    // 2. Ambil nilai dari input box GM
-    const inputEl = document.getElementById('edit-val'); 
-    if (!inputEl) return;
-    const val = inputEl.value;
-
-    // 3. UPDATE SESUAI NAMA KOLOM DATABASE KAMU (Sama Persis!)
-    if (type === 'hp') hero.hp = parseInt(val) || 0;
-    else if (type === 'atk') hero.atk = parseInt(val) || 0;
-    else if (type === 'regen') hero.regen = parseInt(val) || 0;
-    else if (type === 'gold') hero.gold = parseInt(val) || 0; 
-    else if (type === 'pasif') hero.pasif = parseInt(val) || 0; 
-    else if (type === 'status') hero.status = val.toUpperCase();
-    else if (type === 'nameM') hero.nameM = val;
-    else if (type === 'nameF') hero.nameF = val;
-    else if (type === 'title') hero.title = val;
-    else if (type === 'pass') hero.pass = val;
-    else if (type === 'desc') hero.desc = val;
-    else if (type === 'element') hero.element = val; 
-    else if (type === 'weapon') hero.weapon = val; 
-    else if (type === 'mission') hero.mission = val; 
-    else if (type === 'missionSecret') hero.missionSecret = val;
-    else if (type === 'passiveDetail') hero.passiveDetail = val;
-
-    // 4. Update data lokal (Agar tampilan 'data' ikut berubah)
-    // Ingat: 'data' di kodinganmu pakai 'missionSecret', bukan 'misi2'
-    data[current] = { ...data[current], ...hero };
-
-    // 5. Kirim ke Google Sheets
-    saveToCloud(hero);
-    
-    // 6. Simpan cadangan di HP
+    data[current][type] = numVal;
     localStorage.setItem(key, JSON.stringify(data));
-
-    // 7. Refresh
-    if (typeof closeEdit === "function") closeEdit();
-    render();
     
-    alert("Data " + type + " Berhasil Sinkron!");
-    inputEl.value = ""; 
+    // Kirim ke cloud
+    saveToCloud({ [type]: numVal });
+    
+    render(false);
+    alert("Data " + type + " Berhasil!");
 }
 
-        function saveExtra(mode) {
+function saveExtra(mode) {
     if(!isGM || !current) return;
-    
-    const hero = data[current]; // Ambil data karakter yang lagi diedit
+    let heroUpdate = {};
 
     if(mode === 'info') {
-        hero.desc = document.getElementById('in-desc').value || hero.desc;
-        hero.element = document.getElementById('in-elem').value || hero.element;
-        hero.weapon = document.getElementById('in-weap').value || hero.weapon;
+        data[current].desc = document.getElementById('in-desc').value;
+        data[current].elem = document.getElementById('in-elem').value;
+        data[current].weap = document.getElementById('in-weap').value;
+        heroUpdate = { desc: data[current].desc, element: data[current].elem, weapon: data[current].weap };
     } else if(mode === 'mission') {
-        // SINKRON DENGAN KOLOM: misi1 & misi2
-        hero.misi1 = document.getElementById('in-mission').value;
-        hero.misi2 = document.getElementById('in-secret').value;
-    } else if(mode === 'passiveDetail') {
-        // SINKRON DENGAN KOLOM: detailP
-        hero.detailP = document.getElementById('in-pas-detail').value || hero.detailP;
+        data[current].mission = document.getElementById('in-mission').value;
+        data[current].missionSecret = document.getElementById('in-secret').value;
+        heroUpdate = { mission: data[current].mission, missionSecret: data[current].missionSecret };
     } else if(mode === 'identity') {
-        // SINKRON DENGAN KOLOM: nameM, nameF, title, pass, status
-        hero.nameM = document.getElementById('in-name-m').value || hero.nameM;
-        hero.nameF = document.getElementById('in-name-f').value || hero.nameF;
-        hero.title = document.getElementById('in-title').value || hero.title;
-        hero.pass = document.getElementById('in-pass').value || hero.pass;
-        hero.status = document.getElementById('in-status').value;
-        loadIcons();
+        data[current].name = document.getElementById('in-name-m').value;
+        data[current].nameFemale = document.getElementById('in-name-f').value;
+        data[current].title = document.getElementById('in-title').value;
+        data[current].pass = document.getElementById('in-pass').value;
+        data[current].status = document.getElementById('in-status').value;
+        heroUpdate = { 
+            name: data[current].name, 
+            nameFemale: data[current].nameFemale, 
+            title: data[current].title, 
+            pass: data[current].pass, 
+            status: data[current].status 
+        };
     }
-
-    // 1. KIRIM KE GOOGLE SHEETS (Biar Online)
-    saveToCloud(hero);
-
-    // 2. Simpan cadangan di HP sendiri
-    localStorage.setItem(key, JSON.stringify(data));
     
-    alert("Data " + mode.toUpperCase() + " Berhasil Sinkron ke Sheets!");
+    localStorage.setItem(key, JSON.stringify(data));
+    saveToCloud(heroUpdate);
     render(false);
+    alert("Identitas Berhasil Disimpan!");
 }
 
         function setGender(g) {
