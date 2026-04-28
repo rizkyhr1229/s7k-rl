@@ -144,13 +144,15 @@
             border-radius: 20px;
             width: 90%;
             max-width: 500px;
-            margin: 20px auto;
+            margin: 5px auto !important;;
             color: #e0e0e0; 
             font-family: 'Segoe UI', Tahoma, sans-serif;
             box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 15px rgba(255, 215, 0, 0.1);
             line-height: 1.5;
             text-align: justify;
             white-space: pre-line;
+            margin-top: 0px !important; /* Hapus jarak atas */
+            padding-top: 10px !important;
         }
 
         .btn-story-gm {
@@ -298,7 +300,7 @@
             ❕Para Four Lords pun berkumpul untuk mendiskusikan ini... 
 
 
-            <div style="text-align: center; color: gold; font-weight: bold; border-bottom:5px solid #d187ff;"></div>
+            <div style="text-align: center; color: gold; font-weight: bold; border-bottom:5px solid #d187ff; margin-bottom: 0px; padding-bottom: 0px;"></div>
         </div>
     </div>
 
@@ -669,7 +671,7 @@
         };
 
         // --- TARUH DI SINI (Paling Atas Script) ---
-const DATABASE_URL = "https://script.google.com/macros/s/AKfycbwlmJG0fmzanv8JzmVnLa9ordm3hBJC5mSiwpXUOrmSqJcVwm7hmuUgaXlJpxzXWfTf/exec";
+const DATABASE_URL = "https://script.google.com/macros/s/AKfycbzqlWLP8mcm0I4oCypC2WtQBG7cKmPprBlDj3a1lcg_fH-Bw4IiqJQk3SeRDph1loGt/exec";
 let heroes = []; 
 
 async function loadData() {
@@ -979,85 +981,68 @@ async function saveToCloud(heroData) {
 
 function save(type) {
     if (!isGM || !current) return;
-
-    // 1. Cari data di array heroes (Sesuai kolom 'id')
+    
+    // Cari di array heroes agar sinkron ke server
     const hero = heroes.find(h => h.id === current);
     if (!hero) return;
 
-    // 2. Ambil nilai dari input box GM
     const inputEl = document.getElementById('edit-val'); 
     if (!inputEl) return;
     const val = inputEl.value;
 
-    // 3. UPDATE SESUAI NAMA KOLOM DATABASE KAMU (Sama Persis!)
-    if (type === 'hp') hero.hp = parseInt(val) || 0;
+    // SINKRON TOTAL DENGAN KOLOM L-P
+    if (type === 'gold') hero.gold = parseInt(val) || 0;
+    else if (type === 'hp') hero.hp = parseInt(val) || 0;
     else if (type === 'atk') hero.atk = parseInt(val) || 0;
     else if (type === 'regen') hero.regen = parseInt(val) || 0;
-    else if (type === 'gold') hero.gold = parseInt(val) || 0; 
     else if (type === 'pasif') hero.pasif = parseInt(val) || 0; 
+    
+    // Cadangan update identitas lewat jalur save(type)
     else if (type === 'status') hero.status = val.toUpperCase();
-    else if (type === 'nameM') hero.nameM = val;
-    else if (type === 'nameF') hero.nameF = val;
     else if (type === 'title') hero.title = val;
     else if (type === 'pass') hero.pass = val;
-    else if (type === 'desc') hero.desc = val;
-    else if (type === 'element') hero.element = val; 
-    else if (type === 'weapon') hero.weapon = val; 
-    else if (type === 'mission') hero.mission = val; 
-    else if (type === 'missionSecret') hero.missionSecret = val;
-    else if (type === 'passiveDetail') hero.passiveDetail = val;
 
-    // 4. Update data lokal (Agar tampilan 'data' ikut berubah)
-    // Ingat: 'data' di kodinganmu pakai 'missionSecret', bukan 'misi2'
+    // Update data lokal HP
     data[current] = { ...data[current], ...hero };
 
-    // 5. Kirim ke Google Sheets
     saveToCloud(hero);
-    
-    // 6. Simpan cadangan di HP
     localStorage.setItem(key, JSON.stringify(data));
 
-    // 7. Refresh
     if (typeof closeEdit === "function") closeEdit();
     render();
-    
     alert("Data " + type + " Berhasil Sinkron!");
     inputEl.value = ""; 
 }
 
         function saveExtra(mode) {
     if(!isGM || !current) return;
-    
-    const hero = data[current]; // Ambil data karakter yang lagi diedit
+    const hero = data[current]; 
 
-    if(mode === 'info') {
+    if(mode === 'identity') {
+        // Kolom B-F (Pakai name & nameFemale sesuai Sheet baru)
+        hero.name = document.getElementById('in-name-m').value || hero.name;
+        hero.nameFemale = document.getElementById('in-name-f').value || hero.nameFemale;
+        hero.title = document.getElementById('in-title').value || hero.title;
+        hero.pass = document.getElementById('in-pass').value || hero.pass;
+        hero.status = document.getElementById('in-status').value || hero.status;
+        loadIcons();
+    } else if(mode === 'info') {
+        // Kolom G-I
         hero.desc = document.getElementById('in-desc').value || hero.desc;
         hero.element = document.getElementById('in-elem').value || hero.element;
         hero.weapon = document.getElementById('in-weap').value || hero.weapon;
     } else if(mode === 'mission') {
-        // SINKRON DENGAN KOLOM: misi1 & misi2
-        hero.misi1 = document.getElementById('in-mission').value;
-        hero.misi2 = document.getElementById('in-secret').value;
+        // Kolom J-K
+        hero.mission = document.getElementById('in-mission').value;
+        hero.missionSecret = document.getElementById('in-secret').value;
     } else if(mode === 'passiveDetail') {
-        // SINKRON DENGAN KOLOM: detailP
-        hero.detailP = document.getElementById('in-pas-detail').value || hero.detailP;
-    } else if(mode === 'identity') {
-        // SINKRON DENGAN KOLOM: nameM, nameF, title, pass, status
-        hero.nameM = document.getElementById('in-name-m').value || hero.nameM;
-        hero.nameF = document.getElementById('in-name-f').value || hero.nameF;
-        hero.title = document.getElementById('in-title').value || hero.title;
-        hero.pass = document.getElementById('in-pass').value || hero.pass;
-        hero.status = document.getElementById('in-status').value;
-        loadIcons();
+        // Kolom Q
+        hero.passiveDetail = document.getElementById('in-pas-detail').value || hero.passiveDetail;
     }
 
-    // 1. KIRIM KE GOOGLE SHEETS (Biar Online)
     saveToCloud(hero);
-
-    // 2. Simpan cadangan di HP sendiri
     localStorage.setItem(key, JSON.stringify(data));
-    
-    alert("Data " + mode.toUpperCase() + " Berhasil Sinkron ke Sheets!");
+    alert("Data " + mode.toUpperCase() + " Berhasil Sinkron!");
     render(false);
 }
 
