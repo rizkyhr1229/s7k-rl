@@ -872,8 +872,8 @@ setInterval(loadData, 5000);
     h.origin === 'female' ? setGender('female') : setGender('male');
 
     document.getElementById('desc-display').innerText = h.desc || "No Description";
-    document.getElementById('elem-display').innerText = h.elem || "N/A";
-    document.getElementById('weap-display').innerText = h.weap || "N/A";
+    document.getElementById('elem-display').innerText = h.element || "N/A";
+document.getElementById('weap-display').innerText = h.weapon || "N/A";
     
     // 2. Update Bingkai Samping Box Deskripsi (PENTING)
     const infoBox = document.querySelector('.info-box');
@@ -977,43 +977,51 @@ async function saveToCloud(heroData) {
     }
 }
 
-// FUNGSI SAVE BARU (SESUAI DAFTAR KOLOM YANG KAMU KASIH)
 function save(type) {
-    if (!isGM) return;
-    const hero = heroes.find(h => h.id === currentHeroId);
+    if (!isGM || !current) return;
+
+    // 1. Cari data di array heroes (Sesuai kolom 'id')
+    const hero = heroes.find(h => h.id === current);
     if (!hero) return;
 
-    // Ambil input dari box edit GM kamu
+    // 2. Ambil nilai dari input box GM
     const inputEl = document.getElementById('edit-val'); 
+    if (!inputEl) return;
     const val = inputEl.value;
 
-    // SINKRONISASI ANTARA KODE DAN KOLOM DOCS
-    if (type === 'hp') hero.hp = parseInt(val);
-    else if (type === 'atk') hero.atk = parseInt(val);
-    else if (type === 'regen') hero.regen = parseInt(val);
-    else if (type === 'money') hero.gold = parseInt(val); // Sesuai kolom 'gold'
+    // 3. UPDATE SESUAI NAMA KOLOM DATABASE KAMU (Sama Persis!)
+    if (type === 'hp') hero.hp = parseInt(val) || 0;
+    else if (type === 'atk') hero.atk = parseInt(val) || 0;
+    else if (type === 'regen') hero.regen = parseInt(val) || 0;
+    else if (type === 'gold') hero.gold = parseInt(val) || 0; 
+    else if (type === 'pasif') hero.pasif = parseInt(val) || 0; 
     else if (type === 'status') hero.status = val.toUpperCase();
     else if (type === 'nameM') hero.nameM = val;
     else if (type === 'nameF') hero.nameF = val;
     else if (type === 'title') hero.title = val;
     else if (type === 'pass') hero.pass = val;
     else if (type === 'desc') hero.desc = val;
-    else if (type === 'element') hero.element = val;
-    else if (type === 'weapon') hero.weapon = val;
-    else if (type === 'mainObjective') hero.misi1 = val; // Sesuai kolom 'misi1'
-    else if (type === 'secret') hero.misi2 = val;        // Sesuai kolom 'misi2'
-    else if (type === 'pasif') hero.pasif = val;
-    else if (type === 'detailPasif') hero.detailP = val; // Sesuai kolom 'detailP'
+    else if (type === 'element') hero.element = val; 
+    else if (type === 'weapon') hero.weapon = val; 
+    else if (type === 'mission') hero.mission = val; 
+    else if (type === 'missionSecret') hero.missionSecret = val;
+    else if (type === 'passiveDetail') hero.passiveDetail = val;
 
-    // 1. Simpan ke Google Sheets (Biar semua HP berubah)
+    // 4. Update data lokal (Agar tampilan 'data' ikut berubah)
+    // Ingat: 'data' di kodinganmu pakai 'missionSecret', bukan 'misi2'
+    data[current] = { ...data[current], ...hero };
+
+    // 5. Kirim ke Google Sheets
     saveToCloud(hero);
     
-    // 2. Simpan cadangan di LocalStorage HP kamu sendiri
-    localStorage.setItem('SK_HEROES_DATA', JSON.stringify(heroes));
+    // 6. Simpan cadangan di HP
+    localStorage.setItem(key, JSON.stringify(data));
 
-    // 3. Update tampilan & tutup box edit
-    closeEdit();
+    // 7. Refresh
+    if (typeof closeEdit === "function") closeEdit();
     render();
+    
+    alert("Data " + type + " Berhasil Sinkron!");
     inputEl.value = ""; 
 }
 
