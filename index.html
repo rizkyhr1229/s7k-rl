@@ -981,37 +981,53 @@ async function saveToCloud(heroData) {
 
 function save(type) {
     if (!isGM || !current) return;
-    
-    // Cari di array heroes agar sinkron ke server
     const hero = heroes.find(h => h.id === current);
     if (!hero) return;
 
-    const inputEl = document.getElementById('edit-val'); 
-    if (!inputEl) return;
-    const val = inputEl.value;
+    let val = "";
 
-    // SINKRON TOTAL DENGAN KOLOM L-P
-    if (type === 'gold') hero.gold = parseInt(val) || 0;
-    else if (type === 'hp') hero.hp = parseInt(val) || 0;
-    else if (type === 'atk') hero.atk = parseInt(val) || 0;
-    else if (type === 'regen') hero.regen = parseInt(val) || 0;
-    else if (type === 'pasif') hero.pasif = parseInt(val) || 0; 
-    
-    // Cadangan update identitas lewat jalur save(type)
-    else if (type === 'status') hero.status = val.toUpperCase();
-    else if (type === 'title') hero.title = val;
-    else if (type === 'pass') hero.pass = val;
+    // SINKRONISASI ID HTML DENGAN VARIABEL DATABASE
+    if (type === 'money' || type === 'gold') {
+        val = document.getElementById('money-in').value;
+        hero.gold = parseInt(val) || 0;
+    } 
+    else if (type === 'hp') {
+        val = document.getElementById('hp-in').value;
+        hero.hp = parseInt(val) || 0;
+    } 
+    else if (type === 'atk') {
+        val = document.getElementById('atk-in').value;
+        hero.atk = parseInt(val) || 0;
+    } 
+    else if (type === 'spd' || type === 'regen') {
+        val = document.getElementById('spd-in').value;
+        hero.regen = parseInt(val) || 0;
+    } 
+    else if (type === 'passivePoin' || type === 'pasif') {
+        val = document.getElementById('pas-in').value;
+        hero.pasif = parseInt(val) || 0;
+    }
 
-    // Update data lokal HP
+    // Update data lokal
     data[current] = { ...data[current], ...hero };
 
+    // Kirim ke Google Sheet
     saveToCloud(hero);
-    localStorage.setItem(key, JSON.stringify(data));
 
-    if (typeof closeEdit === "function") closeEdit();
+    // Simpan ke HP
+    localStorage.setItem(key, JSON.stringify(data));
+    
+    // Refresh tampilan bar agar langsung gerak
     render();
-    alert("Data " + type + " Berhasil Sinkron!");
-    inputEl.value = ""; 
+    
+    alert("Data " + type.toUpperCase() + " Berhasil Sinkron!");
+    
+    // Kosongkan input setelah klik SET
+    const ids = ['money-in', 'hp-in', 'atk-in', 'spd-in', 'pas-in'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.value = "";
+    });
 }
 
         function saveExtra(mode) {
